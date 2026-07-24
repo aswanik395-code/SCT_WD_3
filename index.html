@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid Clash — Tic-Tac-Toe</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <span class="brand-name">Grid <em>Clash</em></span>
+  </div>
+  <button id="howToPlayBtn" class="btn-icon" aria-haspopup="dialog">How to Play</button>
+</header>
+
+<main id="app">
+
+  <!-- ============ MODE SELECT VIEW ============ -->
+  <section id="modeView" class="view active" aria-label="Game mode selection">
+    <div class="hero">
+      <p class="eyebrow">3 × 3 · X vs O</p>
+      <h1>Grid Clash</h1>
+      <p class="tagline">Challenge your friends or test your strategy against the computer.</p>
+    </div>
+
+    <div class="mode-cards">
+      <button class="mode-card" data-mode="pvp" type="button">
+        <span class="mode-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M8 11v2a3 3 0 0 0 3 3h1M16 13v-2a3 3 0 0 0-3-3h-1"/></svg>
+        </span>
+        <h2>Player vs Player</h2>
+        <p>Two players, one device. Take turns as X and O.</p>
+      </button>
+
+      <button class="mode-card" data-mode="pvc" type="button">
+        <span class="mode-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6M12 16v4"/></svg>
+        </span>
+        <h2>Player vs Computer</h2>
+        <p>Pick your symbol and difficulty, then test your strategy.</p>
+      </button>
+    </div>
+
+    <div id="pvcOptions" class="pvc-options hidden">
+      <div class="option-group">
+        <h3>Choose your symbol</h3>
+        <div class="symbol-toggle" role="group" aria-label="Choose your symbol">
+          <button class="symbol-btn active" data-symbol="X" type="button">X</button>
+          <button class="symbol-btn" data-symbol="O" type="button">O</button>
+        </div>
+      </div>
+      <div class="option-group">
+        <h3>Difficulty</h3>
+        <div class="difficulty-toggle" role="group" aria-label="Choose difficulty">
+          <button class="diff-btn active" data-difficulty="easy" type="button">Easy</button>
+          <button class="diff-btn" data-difficulty="medium" type="button">Medium</button>
+          <button class="diff-btn" data-difficulty="hard" type="button">Hard</button>
+        </div>
+      </div>
+      <button id="startPvcBtn" class="btn-primary" type="button">Start Match</button>
+    </div>
+  </section>
+
+  <!-- ============ GAME VIEW ============ -->
+  <section id="gameView" class="view" aria-label="Game board">
+
+    <div class="scoreboard" id="scoreboard">
+      <div class="score-cell" id="scoreCellX">
+        <div class="score-label" id="scoreLabelX">Player X</div>
+        <div class="score-value" id="scoreValueX">0</div>
+      </div>
+      <div class="score-cell">
+        <div class="score-label">Draws</div>
+        <div class="score-value" id="scoreValueDraws">0</div>
+      </div>
+      <div class="score-cell" id="scoreCellO">
+        <div class="score-label" id="scoreLabelO">Player O</div>
+        <div class="score-value" id="scoreValueO">0</div>
+      </div>
+    </div>
+
+    <div class="turn-indicator" id="turnIndicator">
+      <span class="turn-dot" aria-hidden="true"></span>
+      <span id="turnText">Player X's Turn</span>
+    </div>
+
+    <div class="board-wrap">
+      <div class="board" id="board" role="grid" aria-label="Tic Tac Toe board, 3 by 3"></div>
+
+      <div class="result-overlay hidden" id="resultOverlay" role="alert">
+        <div class="result-card">
+          <h2 id="resultMessage"></h2>
+          <div class="result-actions">
+            <button id="playAgainBtn" class="btn-primary" type="button">Play Again</button>
+            <button id="overlayChangeModeBtn" class="btn-ghost" type="button">Change Mode</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <button id="newGameBtn" class="btn-ghost" type="button">New Game</button>
+      <button id="resetGameBtn" class="btn-ghost" type="button">Reset Game</button>
+      <button id="changeModeBtn" class="btn-ghost" type="button">Change Mode</button>
+      <button id="resetScoreBtn" class="btn-ghost" type="button">Reset Score</button>
+    </div>
+  </section>
+
+  <!-- ============ HISTORY ============ -->
+  <section class="history-card" aria-label="Match history">
+    <div class="history-header">
+      <h2>Match History</h2>
+      <button id="clearHistoryBtn" class="btn-text" type="button" disabled>Clear History</button>
+    </div>
+    <div id="historyList"></div>
+  </section>
+
+</main>
+
+
+
+<!-- How to Play modal -->
+<div class="overlay" id="howToOverlay" role="dialog" aria-modal="true" aria-labelledby="howToTitle">
+  <div class="modal-box">
+    <button class="modal-close" data-close-howto aria-label="Close how to play">&times;</button>
+    <h3 id="howToTitle">How to Play</h3>
+    <ol>
+      <li>Choose a game mode: Player vs Player or Player vs Computer.</li>
+      <li>If playing the computer, pick your symbol and a difficulty.</li>
+      <li>Take turns placing X or O on the grid.</li>
+      <li>Get three matching symbols in a row, column, or diagonal to win.</li>
+      <li>If all nine cells fill up with no winner, it's a draw.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- Reset score confirmation -->
+<div class="overlay" id="confirmScoreOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmScoreTitle">
+  <div class="modal-box">
+    <h3 id="confirmScoreTitle">Reset scoreboard?</h3>
+    <p>This clears all wins and draws recorded so far. This can't be undone.</p>
+    <div class="modal-actions">
+      <button id="cancelResetScore" class="btn-ghost" type="button">Cancel</button>
+      <button id="confirmResetScore" class="btn-primary" type="button">Reset Score</button>
+    </div>
+  </div>
+</div>
+
+<div id="liveRegion" class="visually-hidden" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
